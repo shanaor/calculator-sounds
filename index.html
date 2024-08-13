@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://media.tenor.com/k4Is5g0vmWQAAAAM/grim-reaper-skull.gif');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .calculator {
+            background-color: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            width: 320px;
+            position: relative;
+            animation: aura-animation 5s infinite alternate, fadeIn 0.5s ease-out;
+        }
+
+        @keyframes aura-animation {
+            0% {
+                box-shadow: 0 0 20px #ff4500, 0 0 30px #ff6347, 0 0 40px #ff4500, 0 0 50px #ff6347;
+            }
+            100% {
+                box-shadow: 0 0 30px #ff6347, 0 0 40px #ff4500, 0 0 50px #ff6347, 0 0 60px #ff4500;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        #memoryActions {
+            border: 1px solid #ff6347;
+            background-color: rgba(236, 240, 241, 0.8);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            height: 200px;
+            overflow-y: auto;
+            color: #2c3e50;
+        }
+
+        #memoryActions p {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        #screener {
+            width: 100%;
+            height: 50px;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: right;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background-color: #34495e;
+            color: #ecf0f1;
+            box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        #screener.changed {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            border: none;
+            background-color: #1abc9c;
+            color: #ecf0f1;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s ease, transform 0.3s;
+            transform: perspective(600px) rotateX(0deg);
+            position: relative;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .btn:hover:before {
+            opacity: 1;
+        }
+
+        .btn:active {
+            transform: perspective(600px) rotateX(20deg);
+            background-color: #16a085;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-operator {
+            background-color: #e67e22;
+        }
+
+        .btn-operator:hover {
+            background-color: #d35400;
+        }
+
+        .btn-memory {
+            background-color: #3498db;
+        }
+
+        .btn-memory:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calculator">
+        <div id="memoryActions">
+            <p>Memory Actions:</p>
+        </div>
+        <input type="text" id="screener"> <br>
+
+        <div class="btn-row">
+            <button class="btn btn-memory" onclick="playSound('memory'); memoryClear()">MC</button>
+            <button class="btn btn-memory" onclick="playSound('memory'); memoryRecall()">MR</button>
+            <button class="btn btn-memory" onclick="playSound('memory'); memoryAdder()">M+</button>
+            <button class="btn btn-memory" onclick="playSound('memory'); memorySubtract()">M-</button>
+            <button class="btn btn-memory" onclick="playSound('memory'); memoryRetrive()">MP</button>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn" onclick="playSound('number'); seventh()">7</button>
+            <button class="btn" onclick="playSound('number'); eigth()">8</button>
+            <button class="btn" onclick="playSound('number'); ninth()">9</button>
+            <button class="btn btn-operator" onclick="playSound('operator'); adding()">+</button>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn" onclick="playSound('number'); forth()">4</button>
+            <button class="btn" onclick="playSound('number'); fifth()">5</button>
+            <button class="btn" onclick="playSound('number'); sixth()">6</button>
+            <button class="btn btn-operator" onclick="playSound('operator'); substraction()">-</button>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn" onclick="playSound('number'); first()">1</button>
+            <button class="btn" onclick="playSound('number'); second()">2</button>
+            <button class="btn" onclick="playSound('number'); third()">3</button>
+            <button class="btn btn-operator" onclick="playSound('operator'); division()">/</button>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn" onclick="playSound('number'); zero()">0</button>
+            <button class="btn" onclick="playSound('operator'); dott()">.</button>
+            <button class="btn btn-operator" onclick="playSound('operator'); multi()">X</button>
+            <button class="btn btn-operator" onclick="playSound('operator'); percentage()">%</button>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-operator" onclick="playSound('clear'); clearnum()">C</button>
+            <button class="btn btn-operator" onclick="playSound('delete'); deletelast()">Del</button>
+            <button class="btn btn-operator" onclick="playSound('result'); result()">=</button>
+        </div>
+    </div>
+   
+    <script>
+        let memoryAdd = 0;
+
+        function clearnum() {
+            screener.value = "0";
+        }
+
+        function ninth() {
+            screener.value == "0" ? screener.value = "9" : screener.value += "9";
+        }
+
+        function eigth() {
+            screener.value == "0" ? screener.value = "8" : screener.value += "8";
+        }
+
+        function seventh() {
+            screener.value == "0" ? screener.value = "7" : screener.value += "7";
+        }
+
+        function sixth() {
+            screener.value == "0" ? screener.value = "6" : screener.value += "6";
+        }
+
+        function fifth() {
+            screener.value == "0" ? screener.value = "5" : screener.value += "5";
+        }
+
+        function forth() {
+            screener.value == "0" ? screener.value = "4" : screener.value += "4";
+        }
+
+        function third() {
+            screener.value == "0" ? screener.value = "3" : screener.value += "3";
+        }
+
+        function second() {
+            screener.value == "0" ? screener.value = "2" : screener.value += "2";
+        }
+
+        function first() {
+            screener.value == "0" ? screener.value = "1" : screener.value += "1";
+        }
+
+        function zero() {
+            screener.value == "0" ? screener.value = "0" : screener.value += "0";
+        }
+
+        function dott() {
+            screener.value == "0" ? screener.value += "." : screener.value += ".";
+        }
+
+        function adding() {
+            screener.value == "0" ? screener.value += "+" : screener.value += "+";
+        }
+
+        function substraction() {
+            screener.value == "0" ? screener.value += "-" : screener.value += "-";
+        }
+
+        function multi() {
+            screener.value == "0" ? screener.value += "X" : screener.value += "X";
+        }
+
+        function division() {
+            screener.value == "0" ? screener.value += "/" : screener.value += "/";
+        }
+
+        function percentage() {
+            screener.value == "0" ? screener.value += "%" : screener.value += "%";
+        }
+
+        function deletelast() {
+            screener.value = screener.value.slice(0, -1);
+        }
+
+        function result() {
+            screener.value = screener.value.replace(/X/g, "*");
+            let R = eval(screener.value);
+            R == Infinity || isNaN(R) ? screener.value = "you can't divide and % by 0" : screener.value = R;
+            animateScreen();
+        }
+
+        function memoryClear() {
+            memoryAdd = 0;
+            memoryActions.innerHTML += "<p>Memory Cleared</p>";
+        }
+
+        function memoryRecall() {
+            screener.value = screener.value.replace(/X/g, "*");
+            memoryAdd = eval(screener.value);
+            memoryActions.innerHTML += "<p>Memory Set: " + memoryAdd + "</p>";
+        }
+
+        function memoryAdder() {
+            screener.value = screener.value.replace(/X/g, "*");
+            memoryAdd += eval(screener.value);
+            memoryAdd == 0 ?  memoryActions.innerHTML = `<p> ${screener.value} Added to Memory: ` + memoryAdd  + "</p>":  memoryActions.innerHTML += `<p> ${screener.value} Added to Memory: ` + memoryAdd  + "</p>";
+        }
+
+        function memorySubtract() {
+            screener.value = screener.value.replace(/X/g, "*");
+            memoryAdd -= eval(screener.value);
+            memoryAdd == 0 ?  memoryActions.innerHTML = `<p> "${screener.value} Subtracted from Memory: " + memoryAdd  + "</p>` :   memoryActions.innerHTML += `<p> ${screener.value} Subtracted from Memory: ` + memoryAdd  + "</p>";
+        }
+
+        function memoryRetrive() {
+            screener.value = memoryAdd;
+            memoryActions.innerHTML += "<p>Memory Retrieved: " + memoryAdd + "</p>";
+            animateScreen();
+        }
+
+        function animateScreen() {
+            screener.classList.add('changed');
+            setTimeout(() => {
+                screener.classList.remove('changed');
+            }, 300);
+        }
+
+        // Function to play the appropriate sound
+        function playSound(type) {
+            let audio;
+            switch (type) {
+                case 'number':
+                    audio = new Audio('https://github.com/shanaor/calculator-sounds/raw/main/205751__scorpion67890__imp-laugh.wav');
+                    break;
+                case 'operator':
+                    audio = new Audio('https://github.com/shanaor/calculator-sounds/raw/main/555421__tonsil5__zombie-pain-4.wav');
+                    break;
+                case 'memory':
+                    audio = new Audio('https://freesound.org/data/previews/341/341760_4486188-lq.mp3');
+                    break;
+                case 'clear':
+                    audio = new Audio('https://github.com/shanaor/calculator-sounds/raw/main/178876__rocotilos__game-over-evil.wav');
+                    break;
+                case 'delete':
+                    audio = new Audio('https://github.com/shanaor/calculator-sounds/raw/main/643688__snowfightstudios__devil-demon_how-dare-you.mp3');
+                    break;
+                case 'result':
+                    audio = new Audio('https://github.com/shanaor/calculator-sounds/raw/main/643685__snowfightstudios__devil-demon_good-byes.mp3');
+                    break;
+            }
+            if (audio) {
+                audio.play();
+            }
+        }
+    </script>
+</body>
+
+</html>
